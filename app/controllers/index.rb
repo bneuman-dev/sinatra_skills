@@ -56,3 +56,36 @@ post '/users' do
     erb :sign_up
   end
 end
+
+#-------- PROFILE ------- #
+
+get '/skills/edit' do
+  @errors = true if params[:errors]
+  params.inspect
+  user_id = session[:user_id]
+  @skills = Skill.all
+  redirect '/sessions/new' if user_id.nil?
+  @user = User.find(user_id)
+  erb :edit_skills
+end
+
+post '/skills/edit' do
+  user = User.find(session[:user_id])
+  user.user_skills.each { |uskill| uskill.destroy }
+
+  skill_names = params[:checked].keys
+
+  @models = skill_names.collect do |name|
+    skill = Skill.find_by(name: name)
+    years = params[name]["years"]
+    formal = params[name]["formal"]
+    user.add_skill(skill: skill, years_exp: years, formal: formal)
+  end
+
+  if @models.any? { |model| model.invalid? }
+    redirect to '/skills/edit?errors=true'
+      
+  else
+    redirect to '/'
+  end
+end

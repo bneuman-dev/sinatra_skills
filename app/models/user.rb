@@ -4,6 +4,8 @@ class User < ActiveRecord::Base
   validates :name, :length => { :minimum => 3, :message => "must be at least 3 characters, fool!" }
   validates :entered_password, :length => { :minimum => 6 }
   validates :email, :uniqueness => true, :format => /.+@.+\..+/ # imperfect, but okay
+  has_many :user_skills
+  has_many :skills, through: :user_skills
 
   include BCrypt
 
@@ -21,6 +23,18 @@ class User < ActiveRecord::Base
     user = User.find_by_email(email)
     return user if user && (user.password == password)
     nil # either invalid email or wrong password
+  end
+
+  def add_skill(hash)
+    hash[:user] = self
+    UserSkill.create(hash)
+
+    # if user_skill.valid?
+    #   user_skill
+    
+    # else
+    #   user_skill.errors.full_messages
+    # end
   end
 
 end

@@ -1,0 +1,25 @@
+<div class="container">
+
+
+<% if @errors %>
+  Make sure to fill out years experience and formal education
+  for every skill!
+<% end %>
+
+<h2> Add skill </h2>
+
+<form action="/skills/edit" method="post">
+  <% @skills.each do |skill| %>
+    <p><input type="checkbox" name='<%= "checked[#{skill.name}]" %>' />
+      <%= skill.name %>
+      Years experience:
+       <input type="text" name='<%= "[#{skill.name}][years]" %>' />
+      Formal education? 
+        Yes: <input type="radio" name='<%= "[#{skill.name}][formal]" %>' value="true">
+        No: <input type="radio" name='<%= "[#{skill.name}][formal]" %>' value="false">
+    </p>
+  <% end %>
+  <p><input type="submit" value="Update skills" /></p>
+</form>
+
+</div>

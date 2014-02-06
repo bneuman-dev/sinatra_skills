@@ -66,6 +66,10 @@ form.quirks {
   text-align: center;
 }
 
+ul { 
+  list-style: none;
+}
+
 .label {
   font-weight: bold;
   float: left;
